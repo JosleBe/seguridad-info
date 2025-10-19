@@ -1,0 +1,407 @@
+================================================================================
+                    GUÍA DE VERSIONADO Y CONTROL DE CAMBIOS
+                    MyChat - Sistema de Chat Seguro
+================================================================================
+
+Este documento explica cómo mantener el control de versiones y documentar
+cambios en el proyecto MyChat de forma consistente y profesional.
+
+================================================================================
+                        PROCEDIMIENTO DE VERSIONADO
+================================================================================
+
+Cuando realices cambios en el proyecto, sigue estos pasos:
+
+PASO 1: REALIZAR LOS CAMBIOS
+-----------------------------
+1. Modifica los archivos necesarios (service.py, client.py, etc.)
+2. Prueba exhaustivamente los cambios
+3. Asegúrate de que todo funciona correctamente
+
+PASO 2: CALCULAR NUEVOS HASHES MD5
+-----------------------------------
+1. Ejecuta el script de cálculo de MD5:
+   
+   python calcular_md5.py
+   
+2. Selecciona la opción 1 para generar el reporte
+3. Copia los hashes MD5 generados
+
+PASO 3: ACTUALIZAR readme.txt
+------------------------------
+1. Abre readme.txt
+2. En la sección "HISTORIAL DE VERSIONES", añade una nueva entrada:
+
+--------------------------------------------------------------------------------
+VERSIÓN X.Y.Z - TÍTULO DESCRIPTIVO
+Fecha: DD de Mes de AAAA
+--------------------------------------------------------------------------------
+
+DESCRIPCIÓN:
+[Descripción detallada de los cambios]
+
+CARACTERÍSTICAS IMPLEMENTADAS/MODIFICADAS:
+✓ [Característica 1]
+✓ [Característica 2]
+✓ [Característica 3]
+
+ARCHIVOS Y HASHES MD5:
+┌─────────────────────────────┬──────────────────────────────────┐
+│ Archivo                     │ MD5                              │
+├─────────────────────────────┼──────────────────────────────────┤
+│ simetrica/service.py        │ [HASH MD5]                       │
+│ simetrica/client.py         │ [HASH MD5]                       │
+│ asimetrica/service.py       │ [HASH MD5]                       │
+│ asimetrica/client.py        │ [HASH MD5]                       │
+└─────────────────────────────┴──────────────────────────────────┘
+
+[Resto de la información relevante]
+
+PASO 4: ACTUALIZAR control_cambios.txt
+---------------------------------------
+1. Abre control_cambios.txt
+2. Añade una nueva entrada después de la plantilla:
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ VERSIÓN X.Y.Z - TÍTULO DESCRIPTIVO                                      │
+│ Fecha: DD de Mes de AAAA                                                 │
+│ Tipo: [Nueva Funcionalidad / Corrección / Mejora / Refactorización]     │
+│ Estado: ✓ COMPLETADO Y PROBADO                                          │
+└──────────────────────────────────────────────────────────────────────────┘
+
+DESCRIPCIÓN DEL CAMBIO:
+------------------------
+[Descripción detallada]
+
+MOTIVACIÓN:
+-----------
+[Por qué se realizó el cambio]
+
+ARCHIVOS CREADOS/MODIFICADOS:
+------------------------------
+
+1. [nombre_archivo.py]
+   Propósito: [descripción]
+   Líneas de código: [número]
+   MD5: [hash]
+   Cambios: [lista de cambios]
+
+[Continuar para cada archivo modificado]
+
+PRUEBAS REALIZADAS:
+-------------------
+✓ [Prueba 1]
+✓ [Prueba 2]
+✓ [Prueba 3]
+
+IMPACTO EN EL SISTEMA:
+----------------------
+- [Impacto 1]
+- [Impacto 2]
+
+APROBACIÓN:
+-----------
+Desarrollador: [Tu Nombre]              Fecha: DD/MM/AAAA
+Firma: _____________________
+
+Cliente: [Nombre del Cliente]            Fecha: __________
+Firma: _____________________
+
+================================================================================
+
+PASO 5: REALIZAR BACKUP
+------------------------
+1. Crea una copia de seguridad de la versión actual:
+   
+   mkdir backups\v[X.Y.Z]
+   copy simetrica\*.py backups\v[X.Y.Z]\
+   copy asimetrica\*.py backups\v[X.Y.Z]\
+
+2. Documenta la ubicación del backup en tus registros
+
+PASO 6: COMMIT (SI USAS GIT)
+-----------------------------
+Si estás usando Git para control de versiones:
+
+git add .
+git commit -m "Versión X.Y.Z - [Título descriptivo]"
+git tag -a vX.Y.Z -m "Versión X.Y.Z"
+git push
+git push --tags
+
+================================================================================
+                        ESQUEMA DE NUMERACIÓN DE VERSIONES
+================================================================================
+
+Usamos Versionado Semántico (SemVer): MAJOR.MINOR.PATCH
+
+MAJOR (X.0.0):
+- Cambios incompatibles con versiones anteriores
+- Reestructuración completa del proyecto
+- Cambios en el protocolo de comunicación
+- Ejemplo: 1.0.0 → 2.0.0
+
+MINOR (0.X.0):
+- Nuevas funcionalidades compatibles con versiones anteriores
+- Mejoras significativas
+- Nuevos módulos o características
+- Ejemplo: 1.0.0 → 1.1.0
+
+PATCH (0.0.X):
+- Correcciones de bugs
+- Mejoras menores
+- Optimizaciones de rendimiento
+- Ejemplo: 1.0.0 → 1.0.1
+
+EJEMPLOS:
+---------
+1.0.0 → 1.0.1: Corrección de un bug en el cifrado
+1.0.1 → 1.1.0: Añadir sistema de mensajes privados
+1.1.0 → 2.0.0: Cambiar completamente el protocolo de comunicación
+
+================================================================================
+                        USO DEL SCRIPT calcular_md5.py
+================================================================================
+
+El script calcular_md5.py es una herramienta que facilita el control de
+versiones. Ofrece dos funciones principales:
+
+FUNCIÓN 1: Generar Reporte de MD5
+----------------------------------
+Genera un reporte formateado con los hashes MD5 de todos los archivos .py
+del proyecto. El reporte incluye:
+
+- Tabla formateada para inclusión en documentos
+- Formato de documentación con sangrías
+- Formato compacto de una línea por archivo
+
+Uso:
+1. Ejecuta: python calcular_md5.py
+2. Selecciona opción 1
+3. Copia los hashes al formato que necesites
+
+FUNCIÓN 2: Verificar Integridad
+--------------------------------
+Verifica que los archivos actuales coincidan con los hashes de una versión
+específica (actualmente soporta v1.0.0).
+
+Uso:
+1. Ejecuta: python calcular_md5.py
+2. Selecciona opción 2
+3. Revisa el reporte de verificación
+
+Si hay archivos modificados, el reporte mostrará:
+- Archivos correctos (✓)
+- Archivos modificados (⚠️) con hashes esperados vs actuales
+- Archivos faltantes (❌)
+
+================================================================================
+                        TIPOS DE CAMBIOS
+================================================================================
+
+Al documentar un cambio, clasifícalo según su tipo:
+
+NUEVA FUNCIONALIDAD
+-------------------
+- Se añade una característica nueva al sistema
+- Aumenta las capacidades del software
+- Ejemplo: Añadir sistema de mensajes privados
+
+CORRECCIÓN DE BUG
+-----------------
+- Se corrige un error o comportamiento incorrecto
+- Mejora la estabilidad del sistema
+- Ejemplo: Corregir error en la verificación de HMAC
+
+MEJORA DE SEGURIDAD
+-------------------
+- Se mejora la seguridad del sistema
+- Se implementa un nuevo control de seguridad
+- Se corrige una vulnerabilidad
+- Ejemplo: Añadir rate limiting contra fuerza bruta
+
+REFACTORIZACIÓN
+---------------
+- Se reestructura el código sin cambiar su funcionalidad
+- Se mejora la legibilidad o mantenibilidad
+- Ejemplo: Reorganizar funciones en módulos separados
+
+OPTIMIZACIÓN
+------------
+- Se mejora el rendimiento sin cambiar la funcionalidad
+- Reduce uso de recursos (CPU, memoria, red)
+- Ejemplo: Optimizar algoritmo de broadcast
+
+DOCUMENTACIÓN
+-------------
+- Se actualiza o mejora la documentación
+- No afecta el código funcional
+- Ejemplo: Añadir docstrings a funciones
+
+================================================================================
+                        PLANTILLA DE COMMIT MESSAGE (GIT)
+================================================================================
+
+Si usas Git, usa este formato para los mensajes de commit:
+
+Versión X.Y.Z - [Tipo]: Título breve
+
+Descripción detallada de los cambios realizados.
+Puede ocupar múltiples líneas.
+
+Archivos modificados:
+- simetrica/service.py: [descripción del cambio]
+- simetrica/client.py: [descripción del cambio]
+
+Hashes MD5:
+- simetrica/service.py: [MD5]
+- simetrica/client.py: [MD5]
+
+Closes: #[número de issue] (si aplica)
+
+EJEMPLO:
+--------
+Versión 1.1.0 - Nueva Funcionalidad: Sistema de mensajes privados
+
+Se implementó la capacidad de enviar mensajes privados entre usuarios
+utilizando el comando /msg <usuario> <mensaje>.
+
+Archivos modificados:
+- simetrica/service.py: Añadir función handle_private_message()
+- simetrica/client.py: Actualizar interfaz para mostrar mensajes privados
+
+Hashes MD5:
+- simetrica/service.py: A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6
+- simetrica/client.py: Q7R8S9T0U1V2W3X4Y5Z6A7B8C9D0E1F2
+
+Closes: #42
+
+================================================================================
+                        CHECKLIST ANTES DE NUEVA VERSIÓN
+================================================================================
+
+Antes de crear una nueva versión, verifica lo siguiente:
+
+CÓDIGO:
+□ Todos los cambios están implementados
+□ El código compila/ejecuta sin errores
+□ No hay warnings críticos
+□ Se siguieron las convenciones de código del proyecto
+
+PRUEBAS:
+□ Se realizaron pruebas unitarias (si aplica)
+□ Se realizaron pruebas de integración
+□ Se probó la funcionalidad en diferentes escenarios
+□ Se verificó la compatibilidad con versiones anteriores (si aplica)
+
+SEGURIDAD:
+□ No se introducen vulnerabilidades conocidas
+□ Se validan todas las entradas de usuario
+□ Los datos sensibles están protegidos
+□ Se actualizaron los hashes SHA-256 si es necesario
+
+DOCUMENTACIÓN:
+□ Se actualizó readme.txt con la nueva versión
+□ Se actualizó control_cambios.txt
+□ Se calcularon y registraron los nuevos hashes MD5
+□ Se documentaron las razones de los cambios
+□ Se listaron todos los archivos modificados
+
+BACKUP:
+□ Se creó backup de la versión anterior
+□ Se verificó la integridad del backup
+□ Se documentó la ubicación del backup
+
+APROBACIÓN:
+□ Los cambios fueron revisados
+□ El cliente fue notificado (si aplica)
+□ Se obtuvo aprobación para desplegar
+
+================================================================================
+                        PROCEDIMIENTO DE ROLLBACK
+================================================================================
+
+Si necesitas revertir a una versión anterior:
+
+PASO 1: IDENTIFICAR VERSIÓN OBJETIVO
+-------------------------------------
+1. Consulta control_cambios.txt
+2. Identifica la versión a la que deseas volver
+3. Verifica los hashes MD5 de esa versión
+
+PASO 2: RESTAURAR ARCHIVOS
+---------------------------
+1. Localiza el backup de la versión objetivo
+2. Copia los archivos del backup al proyecto:
+   
+   copy backups\vX.Y.Z\*.py simetrica\
+   copy backups\vX.Y.Z\*.py asimetrica\
+
+PASO 3: VERIFICAR INTEGRIDAD
+-----------------------------
+1. Ejecuta: python calcular_md5.py
+2. Selecciona opción 2 (si es v1.0.0) o calcula manualmente
+3. Compara con los hashes documentados
+4. Verifica que coincidan
+
+PASO 4: PROBAR
+---------------
+1. Ejecuta el servidor
+2. Ejecuta un cliente de prueba
+3. Verifica que todo funciona correctamente
+
+PASO 5: DOCUMENTAR
+-------------------
+1. Añade una entrada en control_cambios.txt documentando el rollback
+2. Incluye:
+   - Fecha del rollback
+   - Versión de origen
+   - Versión de destino
+   - Razón del rollback
+   - Hashes MD5 verificados
+
+EJEMPLO DE DOCUMENTACIÓN DE ROLLBACK:
+--------------------------------------
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ ROLLBACK: v1.2.0 → v1.1.0                                               │
+│ Fecha: DD de Mes de AAAA                                                 │
+│ Tipo: Rollback                                                           │
+│ Estado: ✓ COMPLETADO                                                     │
+└──────────────────────────────────────────────────────────────────────────┘
+
+RAZÓN DEL ROLLBACK:
+-------------------
+Se detectó un bug crítico en la versión 1.2.0 que afecta la integridad de
+los mensajes. Se decidió revertir a la versión 1.1.0 estable mientras se
+investiga y corrige el problema.
+
+ARCHIVOS RESTAURADOS:
+---------------------
+[Lista de archivos con sus MD5 de la v1.1.0]
+
+VERIFICACIÓN:
+-------------
+✓ Todos los hashes MD5 verificados correctamente
+✓ Pruebas realizadas exitosamente
+✓ Sistema operativo normalmente
+
+PRÓXIMOS PASOS:
+---------------
+- Investigar causa del bug en v1.2.0
+- Corregir problema
+- Crear v1.2.1 con la corrección
+
+================================================================================
+                        CONTACTO Y SOPORTE
+================================================================================
+
+Para preguntas sobre el procedimiento de versionado:
+- Consulta readme.txt y control_cambios.txt
+- Contacta al desarrollador principal
+- Revisa la documentación en este archivo
+
+================================================================================
+FIN DEL DOCUMENTO
+Última actualización: 19 de Octubre de 2025
+================================================================================

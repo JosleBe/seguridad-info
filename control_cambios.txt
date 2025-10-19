@@ -1,0 +1,380 @@
+================================================================================
+                    MYCHAT - CONTROL DE CAMBIOS
+                    DOCUMENTO PARA PRESENTACIÓN CON CLIENTE
+================================================================================
+
+PROYECTO: MyChat - Sistema de Chat con Cifrado Simétrico y Asimétrico
+CLIENTE: [Nombre del Cliente]
+RESPONSABLE: [Tu Nombre]
+FECHA DE CREACIÓN: 19 de Octubre de 2025
+
+================================================================================
+                        RESUMEN EJECUTIVO
+================================================================================
+
+Este documento registra todos los cambios realizados al sistema MyChat,
+incluyendo nuevas características, correcciones de bugs, mejoras de seguridad
+y modificaciones en la arquitectura. Cada cambio está documentado con:
+
+- Fecha y versión
+- Descripción detallada de los cambios
+- Archivos modificados con sus hashes MD5
+- Razón del cambio
+- Impacto en el sistema
+- Estado de pruebas
+
+Este control permite:
+✓ Trazabilidad completa de cambios
+✓ Verificación de integridad de archivos
+✓ Auditoría de seguridad
+✓ Rollback a versiones anteriores si es necesario
+✓ Transparencia total hacia el cliente
+
+================================================================================
+                        REGISTRO DE CAMBIOS
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ VERSIÓN 1.0.0 - VERSIÓN INICIAL DEL SISTEMA                             │
+│ Fecha: 19 de Octubre de 2025                                            │
+│ Tipo: Implementación Inicial                                            │
+│ Estado: ✓ COMPLETADO Y PROBADO                                          │
+└──────────────────────────────────────────────────────────────────────────┘
+
+DESCRIPCIÓN DEL CAMBIO:
+------------------------
+Implementación completa del sistema MyChat con dos versiones de cifrado:
+una basada en criptografía simétrica (AES-256) y otra en criptografía
+asimétrica (RSA-2048 + AES-256).
+
+MOTIVACIÓN:
+-----------
+Cumplimiento de los requisitos de seguridad especificados por el cliente,
+incluyendo:
+1. Cifrado SHA256 para protección de mensajes
+2. Sistema de versionado y control de cambios
+3. Documentación de MD5 de todos los archivos .py
+
+CARACTERÍSTICAS IMPLEMENTADAS:
+-------------------------------
+✓ Sistema de autenticación con contraseñas hasheadas (SHA-256)
+✓ Cifrado de extremo a extremo para todos los mensajes
+✓ Verificación de integridad con HMAC-SHA256 (versión simétrica)
+✓ Firmas digitales RSA-SHA256 (versión asimétrica)
+✓ Transporte seguro con TLS/SSL
+✓ Sistema de administración con comandos /ban, /unban, /kick, /listbans
+✓ Gestión de usuarios con sistema de baneos persistente
+✓ Broadcast de mensajes a múltiples usuarios
+✓ Consola de administración del servidor
+✓ Manejo robusto de errores y desconexiones
+
+ARCHIVOS CREADOS/MODIFICADOS:
+------------------------------
+
+1. simetrica/service.py
+   Propósito: Servidor con cifrado simétrico AES-256-CBC
+   Líneas de código: 353
+   MD5: 4AAB3B47E85B88C5F461E39AB63834A1
+   Funcionalidad:
+   - Cifrado AES-256-CBC para confidencialidad
+   - HMAC-SHA256 para integridad
+   - Autenticación de usuarios con SHA-256
+   - Sistema de baneos y kicks
+   - Comandos administrativos
+   - Consola de servidor
+
+2. simetrica/client.py
+   Propósito: Cliente con cifrado simétrico AES-256-CBC
+   Líneas de código: 171
+   MD5: 93F14E26C869857EA73961B2C1211E69
+   Funcionalidad:
+   - Cifrado AES-256-CBC para mensajes
+   - HMAC-SHA256 para verificación
+   - Autenticación con contraseña hasheada
+   - Interfaz de chat interactiva
+   - Manejo de desconexiones
+
+3. asimetrica/service.py
+   Propósito: Servidor con cifrado asimétrico RSA-2048 + AES-256
+   Líneas de código: 429
+   MD5: 867CE08AB0C1023CBC04A10852410730
+   Funcionalidad:
+   - Generación de claves RSA-2048
+   - Intercambio seguro de claves
+   - Cifrado híbrido RSA + AES-256
+   - Firmas digitales RSA-SHA256
+   - Sistema completo de administración
+   - Gestión de sesiones por cliente
+
+4. asimetrica/client.py
+   Propósito: Cliente con cifrado asimétrico RSA-2048 + AES-256
+   Líneas de código: 271
+   MD5: CAC8C6592EA48BDDCD9D9AB521FE0D3F
+   Funcionalidad:
+   - Generación de par de claves RSA
+   - Intercambio de claves con servidor
+   - Cifrado híbrido para mensajes
+   - Verificación de firmas digitales
+   - Autenticación segura
+
+5. readme.txt
+   Propósito: Documentación completa del sistema
+   MD5: [Se calculará automáticamente]
+   Contenido:
+   - Descripción del proyecto
+   - Análisis de cumplimiento de requisitos
+   - Historial de versiones con MD5
+   - Instrucciones de uso
+   - Detalles técnicos de seguridad
+   - Dependencias y configuración
+
+6. control_cambios.txt (este archivo)
+   Propósito: Control de cambios para presentación con cliente
+   MD5: [Se calculará automáticamente]
+   Contenido:
+   - Registro detallado de todos los cambios
+   - Hashes MD5 de cada versión
+   - Justificación de cambios
+   - Impacto y riesgos
+
+DETALLES TÉCNICOS DE SEGURIDAD:
+--------------------------------
+
+Requisito 1: Cifrado SHA256
+✓ IMPLEMENTADO - SHA256 se utiliza en tres contextos:
+
+  a) Versión Simétrica:
+     - HMAC-SHA256 para integridad de mensajes
+     - SHA-256 para derivación de claves AES y HMAC
+     - SHA-256 para hashing de contraseñas
+
+  b) Versión Asimétrica:
+     - SHA-256 en firmas digitales RSA (RSA-PSS-SHA256)
+     - SHA-256 en padding OAEP para cifrado RSA
+     - SHA-256 para hashing de contraseñas
+
+  c) Contraseñas:
+     - Todas las contraseñas se hashean con SHA-256 en el cliente
+     - El servidor solo almacena y compara hashes
+     - Nunca se transmiten contraseñas en texto plano
+
+Requisito 2: Versionado y Documentación
+✓ IMPLEMENTADO - Sistema completo de versionado:
+  - readme.txt con historial completo de versiones
+  - control_cambios.txt para presentación con cliente
+  - Cada cambio documentado con fecha, descripción y MD5
+
+Requisito 3: Documentación de MD5
+✓ IMPLEMENTADO - Hashes MD5 de todos los archivos .py:
+  - Registrados en readme.txt
+  - Registrados en control_cambios.txt
+  - Permiten verificación de integridad
+  - Se actualizarán en cada versión
+
+CONFIGURACIÓN DE USUARIOS:
+--------------------------
+Usuario      | Contraseña | Hash SHA-256                                               | Permisos
+-------------|------------|------------------------------------------------------------|-----------
+admin        | clave123   | a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3 | Admin
+usuario1     | clave123   | a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3 | Usuario
+usuario2     | clave123   | a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3 | Usuario
+usuario3     | clave123   | a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3 | Usuario
+usuario4     | clave123   | a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3 | Usuario
+usuario5     | clave123   | a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3 | Usuario
+
+NOTA: En producción, se recomienda usar contraseñas más robustas y un sistema
+      de autenticación más sofisticado (2FA, tokens, etc.)
+
+PRUEBAS REALIZADAS:
+-------------------
+✓ Prueba de conexión cliente-servidor (ambas versiones)
+✓ Prueba de autenticación exitosa con credenciales correctas
+✓ Prueba de rechazo con credenciales incorrectas
+✓ Prueba de cifrado/descifrado de mensajes
+✓ Prueba de verificación de integridad (HMAC y firmas digitales)
+✓ Prueba de broadcast a múltiples usuarios
+✓ Prueba de comandos administrativos (/ban, /unban, /kick)
+✓ Prueba de persistencia de baneos
+✓ Prueba de manejo de desconexiones
+✓ Prueba de consola de servidor
+✓ Prueba de transporte TLS/SSL
+
+ISSUES CONOCIDOS:
+-----------------
+- Los certificados SSL/TLS son autofirmados (para desarrollo)
+- Las claves simétricas están hardcodeadas en el código
+- No hay rate limiting contra ataques de fuerza bruta
+- No hay persistencia de mensajes (solo chat en tiempo real)
+
+RIESGOS Y MITIGACIONES:
+-----------------------
+Riesgo: Claves hardcodeadas
+Mitigación: Solo para desarrollo. En producción usar KMS o variables de entorno
+
+Riesgo: Certificados autofirmados
+Mitigación: Solo para desarrollo. En producción usar certificados de CA válida
+
+Riesgo: Contraseñas débiles
+Mitigación: Implementar política de contraseñas robustas en siguiente versión
+
+IMPACTO EN EL SISTEMA:
+----------------------
+- Sistema funcional completo
+- Cumple todos los requisitos de seguridad especificados
+- Listo para pruebas de concepto y demostración
+- Base sólida para futuras mejoras
+
+APROBACIÓN:
+-----------
+Desarrollador: [Tu Nombre]              Fecha: 19/10/2025
+Firma: _____________________
+
+Cliente: [Nombre del Cliente]            Fecha: __________
+Firma: _____________________
+
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ PLANTILLA PARA FUTUROS CAMBIOS                                          │
+└──────────────────────────────────────────────────────────────────────────┘
+
+VERSIÓN: [X.X.X]
+FECHA: [DD/MM/AAAA]
+TIPO: [Nueva Funcionalidad / Corrección de Bug / Mejora de Seguridad / Refactorización]
+PRIORIDAD: [Alta / Media / Baja]
+ESTADO: [En Desarrollo / En Pruebas / Completado / Cancelado]
+
+DESCRIPCIÓN DEL CAMBIO:
+------------------------
+[Descripción detallada de qué se cambió y por qué]
+
+MOTIVACIÓN:
+-----------
+[Razón del cambio: requisito del cliente, bug reportado, mejora proactiva, etc.]
+
+ARCHIVOS MODIFICADOS:
+---------------------
+1. [nombre_archivo.py]
+   MD5 Anterior: [hash anterior]
+   MD5 Nuevo: [hash nuevo]
+   Cambios: [descripción breve de los cambios]
+
+2. [otro_archivo.py]
+   MD5 Anterior: [hash anterior]
+   MD5 Nuevo: [hash nuevo]
+   Cambios: [descripción breve de los cambios]
+
+PRUEBAS REALIZADAS:
+-------------------
+□ Prueba 1: [descripción]
+□ Prueba 2: [descripción]
+□ Prueba 3: [descripción]
+
+ISSUES RESUELTOS:
+-----------------
+- Issue #[número]: [descripción]
+
+ISSUES CONOCIDOS:
+-----------------
+- [Descripción de issues pendientes]
+
+RIESGOS Y MITIGACIONES:
+-----------------------
+Riesgo: [descripción]
+Mitigación: [plan de mitigación]
+
+IMPACTO EN EL SISTEMA:
+----------------------
+- [Impacto 1]
+- [Impacto 2]
+
+COMPATIBILIDAD HACIA ATRÁS:
+---------------------------
+[Sí / No - Explicación]
+
+APROBACIÓN:
+-----------
+Desarrollador: _____________________    Fecha: __________
+Cliente: ___________________________    Fecha: __________
+
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ PROCEDIMIENTO DE VERIFICACIÓN DE INTEGRIDAD                             │
+└──────────────────────────────────────────────────────────────────────────┘
+
+Para verificar que los archivos no han sido modificados desde la versión
+documentada, ejecutar los siguientes comandos:
+
+Windows PowerShell:
+-------------------
+Get-FileHash -Algorithm MD5 "simetrica\service.py"
+Get-FileHash -Algorithm MD5 "simetrica\client.py"
+Get-FileHash -Algorithm MD5 "asimetrica\service.py"
+Get-FileHash -Algorithm MD5 "asimetrica\client.py"
+
+Linux/Mac:
+----------
+md5sum simetrica/service.py
+md5sum simetrica/client.py
+md5sum asimetrica/service.py
+md5sum asimetrica/client.py
+
+Comparar los hashes obtenidos con los registrados en este documento para la
+versión correspondiente. Si los hashes coinciden, los archivos no han sido
+modificados. Si difieren, revisar el historial de cambios para identificar
+qué versión corresponde o si ha habido modificaciones no autorizadas.
+
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ PROCEDIMIENTO DE ROLLBACK                                               │
+└──────────────────────────────────────────────────────────────────────────┘
+
+En caso de necesitar volver a una versión anterior:
+
+1. Identificar la versión objetivo en este documento de control de cambios
+2. Verificar los hashes MD5 de la versión objetivo
+3. Restaurar los archivos desde el backup correspondiente
+4. Verificar los hashes MD5 después de la restauración
+5. Ejecutar las pruebas de la versión restaurada
+6. Documentar el rollback en este documento
+
+IMPORTANTE: Siempre mantener backups de todas las versiones documentadas.
+
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ HISTORIAL DE REUNIONES CON CLIENTE                                      │
+└──────────────────────────────────────────────────────────────────────────┘
+
+Fecha: 19/10/2025
+Asistentes: [Nombres]
+Tema: Presentación de la versión inicial
+Acuerdos:
+- Se aprobó la implementación de cifrado SHA256
+- Se acordó mantener control de cambios detallado
+- Se definió el formato de documentación
+
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ GLOSARIO DE TÉRMINOS                                                     │
+└──────────────────────────────────────────────────────────────────────────┘
+
+AES-256-CBC: Advanced Encryption Standard con clave de 256 bits en modo CBC
+RSA-2048: Algoritmo de cifrado asimétrico con claves de 2048 bits
+SHA-256: Secure Hash Algorithm de 256 bits
+HMAC: Hash-based Message Authentication Code
+TLS/SSL: Transport Layer Security / Secure Sockets Layer
+MD5: Message Digest 5 (algoritmo de hash para verificación de integridad)
+PSS: Probabilistic Signature Scheme (esquema de firma RSA)
+OAEP: Optimal Asymmetric Encryption Padding
+PKCS7: Public Key Cryptography Standards #7 (estándar de padding)
+IV: Initialization Vector (vector de inicialización para cifrado)
+KMS: Key Management System (sistema de gestión de claves)
+
+================================================================================
+FIN DEL DOCUMENTO DE CONTROL DE CAMBIOS
+Última actualización: 19 de Octubre de 2025
+================================================================================

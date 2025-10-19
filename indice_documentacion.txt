@@ -1,0 +1,453 @@
+================================================================================
+                    ÍNDICE DE DOCUMENTACIÓN
+                    MyChat - Sistema de Chat Seguro v1.0.0
+================================================================================
+
+Este archivo sirve como índice y punto de entrada a toda la documentación
+del proyecto MyChat. Use este documento para navegar rápidamente a la
+información que necesita.
+
+================================================================================
+                        GUÍA RÁPIDA DE DOCUMENTOS
+================================================================================
+
+¿QUÉ DOCUMENTO NECESITO?
+-------------------------
+
+Si eres...                          Lee...
+---------------------------------------------------------------------------
+Cliente                          → resumen_ejecutivo.txt
+Desarrollador nuevo              → readme.txt
+Administrador del sistema        → readme.txt (sección Instrucciones)
+Auditor de seguridad            → control_cambios.txt + readme.txt
+Persona haciendo cambios        → guia_versionado.txt
+Persona verificando integridad  → control_cambios.txt o ejecuta calcular_md5.py
+
+Si necesitas...                     Consulta...
+---------------------------------------------------------------------------
+Entender el proyecto             → readme.txt
+Ver qué se ha cumplido           → resumen_ejecutivo.txt
+Historial de cambios             → control_cambios.txt
+Hacer una nueva versión          → guia_versionado.txt
+Verificar MD5 de archivos        → control_cambios.txt o calcular_md5.py
+Instrucciones de uso             → readme.txt (sección Instrucciones)
+Detalles de seguridad            → readme.txt (sección Detalles Técnicos)
+Aprobar entrega                  → resumen_ejecutivo.txt
+
+================================================================================
+                        DOCUMENTOS DEL PROYECTO
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ 1. RESUMEN_EJECUTIVO.TXT                                                 │
+│    Para: Cliente, Gerencia, Stakeholders                                │
+│    Propósito: Presentación oficial de la entrega                        │
+└──────────────────────────────────────────────────────────────────────────┘
+
+CONTENIDO:
+- ✓ Estado de cumplimiento de requisitos
+- ✓ Hashes MD5 de la versión actual
+- ✓ Arquitectura del sistema (resumen)
+- ✓ Características implementadas
+- ✓ Instrucciones de uso rápido
+- ✓ Archivos entregados
+- ✓ Próximos pasos sugeridos
+- ✓ Sección de aprobación del cliente
+
+CUÁNDO LEER:
+- Primera vez que revisas el proyecto
+- Antes de aprobar la entrega
+- Para presentar a stakeholders
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ 2. README.TXT                                                            │
+│    Para: Todos (Documento Principal)                                    │
+│    Propósito: Documentación técnica completa                            │
+└──────────────────────────────────────────────────────────────────────────┘
+
+CONTENIDO:
+- ✓ Descripción detallada del proyecto
+- ✓ Análisis de cumplimiento de requisitos
+- ✓ Historial completo de versiones con MD5
+- ✓ Instrucciones de uso paso a paso
+- ✓ Detalles técnicos de seguridad
+- ✓ Configuración de usuarios
+- ✓ Dependencias y requisitos
+- ✓ Notas de seguridad
+- ✓ Próximas versiones planificadas
+
+CUÁNDO LEER:
+- Para entender el proyecto en profundidad
+- Cuando necesites instrucciones de uso
+- Para conocer detalles técnicos
+- Al incorporarte al equipo de desarrollo
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ 3. CONTROL_CAMBIOS.TXT                                                   │
+│    Para: Cliente, Auditores, Control de Calidad                         │
+│    Propósito: Registro oficial de cambios para presentar con cliente    │
+└──────────────────────────────────────────────────────────────────────────┘
+
+CONTENIDO:
+- ✓ Registro detallado de cada versión
+- ✓ Descripción y justificación de cambios
+- ✓ Hashes MD5 de cada versión
+- ✓ Archivos modificados en cada cambio
+- ✓ Pruebas realizadas
+- ✓ Impacto en el sistema
+- ✓ Sección de aprobación cliente-desarrollador
+- ✓ Plantilla para futuros cambios
+- ✓ Procedimientos de verificación y rollback
+- ✓ Historial de reuniones con cliente
+
+CUÁNDO LEER:
+- Para auditorías de cambios
+- Al necesitar justificación de un cambio
+- Para verificar hashes MD5 históricos
+- Al hacer rollback a versión anterior
+- Para presentar al cliente
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ 4. GUIA_VERSIONADO.TXT                                                   │
+│    Para: Desarrolladores                                                │
+│    Propósito: Guía paso a paso para crear nuevas versiones              │
+└──────────────────────────────────────────────────────────────────────────┘
+
+CONTENIDO:
+- ✓ Procedimiento completo de versionado (6 pasos)
+- ✓ Esquema de numeración de versiones (SemVer)
+- ✓ Instrucciones de uso de calcular_md5.py
+- ✓ Tipos de cambios (funcionalidad, bug, seguridad, etc.)
+- ✓ Plantilla de commit messages para Git
+- ✓ Checklist pre-versión
+- ✓ Procedimiento de rollback detallado
+- ✓ Ejemplos prácticos
+
+CUÁNDO LEER:
+- Antes de crear una nueva versión
+- Al necesitar hacer rollback
+- Para entender el flujo de versionado
+- Cuando tengas dudas sobre documentación
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ 5. INDICE_DOCUMENTACION.TXT (Este Archivo)                              │
+│    Para: Todos                                                           │
+│    Propósito: Índice y punto de entrada a la documentación              │
+└──────────────────────────────────────────────────────────────────────────┘
+
+CONTENIDO:
+- ✓ Guía rápida de documentos
+- ✓ Descripción de cada documento
+- ✓ Estructura del proyecto
+- ✓ Mapa de archivos
+- ✓ Rutas de lectura recomendadas
+
+CUÁNDO LEER:
+- Primera vez que abres el proyecto
+- Cuando no sabes qué documento consultar
+- Para entender la estructura de documentación
+
+================================================================================
+                        ESTRUCTURA DEL PROYECTO
+================================================================================
+
+MyChat/
+│
+├── simetrica/                      # Versión con cifrado simétrico
+│   ├── service.py                  # Servidor (353 líneas)
+│   └── client.py                   # Cliente (171 líneas)
+│
+├── asimetrica/                     # Versión con cifrado asimétrico
+│   ├── service.py                  # Servidor (429 líneas)
+│   └── client.py                   # Cliente (271 líneas)
+│
+├── cert.pem                        # Certificado SSL/TLS
+├── key.pem                         # Clave privada SSL/TLS
+│
+├── readme.txt                      # Documentación técnica completa
+├── control_cambios.txt             # Control de cambios oficial
+├── guia_versionado.txt             # Guía de versionado
+├── resumen_ejecutivo.txt           # Resumen para cliente
+├── indice_documentacion.txt        # Este archivo
+│
+├── calcular_md5.py                 # Script de cálculo de MD5
+│
+└── banned.txt                      # Lista de usuarios baneados (se crea automáticamente)
+
+================================================================================
+                        RUTAS DE LECTURA RECOMENDADAS
+================================================================================
+
+RUTA 1: CLIENTE/STAKEHOLDER
+----------------------------
+Objetivo: Entender y aprobar la entrega
+
+1. indice_documentacion.txt (este archivo) - 5 min
+2. resumen_ejecutivo.txt - 15 min
+3. control_cambios.txt (sección de aprobación) - 5 min
+4. (Opcional) readme.txt (Instrucciones de Uso) - 10 min
+
+Tiempo total: ~25-35 minutos
+
+RUTA 2: DESARROLLADOR NUEVO
+----------------------------
+Objetivo: Incorporarse al proyecto
+
+1. indice_documentacion.txt (este archivo) - 5 min
+2. resumen_ejecutivo.txt - 15 min
+3. readme.txt completo - 30 min
+4. guia_versionado.txt - 20 min
+5. control_cambios.txt - 15 min
+6. Revisar código fuente - 60+ min
+
+Tiempo total: ~2-3 horas
+
+RUTA 3: USUARIO FINAL
+---------------------
+Objetivo: Usar el sistema
+
+1. readme.txt (sección Instrucciones de Uso) - 10 min
+2. Probar el sistema - 20 min
+
+Tiempo total: ~30 minutos
+
+RUTA 4: AUDITOR DE SEGURIDAD
+-----------------------------
+Objetivo: Auditar la seguridad
+
+1. resumen_ejecutivo.txt - 15 min
+2. readme.txt (sección Detalles Técnicos de Seguridad) - 20 min
+3. control_cambios.txt completo - 30 min
+4. Revisar código fuente - 120+ min
+5. Ejecutar calcular_md5.py para verificar integridad - 5 min
+
+Tiempo total: ~3+ horas
+
+RUTA 5: DESARROLLADOR HACIENDO CAMBIOS
+---------------------------------------
+Objetivo: Crear una nueva versión
+
+1. guia_versionado.txt completo - 20 min
+2. control_cambios.txt (plantilla) - 5 min
+3. Hacer los cambios en el código - variable
+4. Ejecutar calcular_md5.py - 2 min
+5. Actualizar readme.txt - 10 min
+6. Actualizar control_cambios.txt - 15 min
+
+Tiempo total: ~52+ minutos (más tiempo de desarrollo)
+
+================================================================================
+                        MAPA DE CONTENIDO POR TEMA
+================================================================================
+
+SEGURIDAD
+---------
+- readme.txt → Sección "Detalles Técnicos de Seguridad"
+- readme.txt → Sección "Notas de Seguridad"
+- control_cambios.txt → "Detalles Técnicos de Seguridad"
+- resumen_ejecutivo.txt → "Arquitectura del Sistema"
+
+INSTRUCCIONES DE USO
+--------------------
+- readme.txt → Sección "Instrucciones de Uso"
+- resumen_ejecutivo.txt → "Instrucciones de Uso Rápido"
+
+HISTORIAL DE VERSIONES
+-----------------------
+- readme.txt → Sección "Historial de Versiones"
+- control_cambios.txt → Sección "Registro de Cambios"
+
+HASHES MD5
+----------
+- readme.txt → En cada entrada de versión
+- control_cambios.txt → En cada entrada de cambio
+- resumen_ejecutivo.txt → Sección "Hashes MD5"
+- calcular_md5.py → Herramienta automatizada
+
+VERSIONADO
+----------
+- guia_versionado.txt → Documento completo dedicado
+- control_cambios.txt → Plantilla para nuevos cambios
+
+CUMPLIMIENTO DE REQUISITOS
+---------------------------
+- readme.txt → Sección "Análisis de Cumplimiento de Requisitos"
+- resumen_ejecutivo.txt → Sección "Cumplimiento de Requisitos"
+- control_cambios.txt → Para cada requisito en detalle
+
+CONFIGURACIÓN
+-------------
+- readme.txt → Secciones "Usuarios", "Puertos", "Certificados"
+- readme.txt → Sección "Dependencias"
+
+PROCEDIMIENTOS
+--------------
+- guia_versionado.txt → Procedimientos de versionado y rollback
+- control_cambios.txt → Procedimientos de verificación
+- readme.txt → Instrucciones de instalación y uso
+
+================================================================================
+                        HERRAMIENTAS INCLUIDAS
+================================================================================
+
+CALCULAR_MD5.PY
+---------------
+Script de Python para calcular y verificar hashes MD5
+
+FUNCIONES:
+1. Generar reporte de MD5 de archivos actuales
+   - Tabla formateada
+   - Formato para documentación
+   - Formato compacto
+
+2. Verificar integridad contra versión 1.0.0
+   - Compara hashes actuales vs documentados
+   - Identifica archivos modificados
+   - Identifica archivos faltantes
+
+USO:
+python calcular_md5.py
+[Selecciona opción del menú]
+
+CUÁNDO USAR:
+- Al crear una nueva versión (para obtener MD5)
+- Al recibir archivos (para verificar integridad)
+- En auditorías de seguridad
+- Al sospechar modificaciones no autorizadas
+
+================================================================================
+                        GLOSARIO DE TÉRMINOS
+================================================================================
+
+TÉRMINOS COMUNES EN LA DOCUMENTACIÓN:
+
+MD5: Algoritmo de hash para verificación de integridad de archivos
+SHA-256: Algoritmo criptográfico de hash de 256 bits
+AES-256-CBC: Cifrado simétrico de 256 bits en modo CBC
+RSA-2048: Cifrado asimétrico con claves de 2048 bits
+HMAC: Código de autenticación de mensajes basado en hash
+TLS/SSL: Protocolo de seguridad de la capa de transporte
+SemVer: Versionado Semántico (MAJOR.MINOR.PATCH)
+Rollback: Revertir a una versión anterior del software
+
+Para más términos, consulte el Glosario en control_cambios.txt
+
+================================================================================
+                        PREGUNTAS FRECUENTES
+================================================================================
+
+P: ¿Qué documento leo primero?
+R: Si eres cliente → resumen_ejecutivo.txt
+   Si eres desarrollador → readme.txt
+   Si no sabes → este archivo (indice_documentacion.txt)
+
+P: ¿Dónde están los hashes MD5 actuales?
+R: En resumen_ejecutivo.txt (rápido) o ejecuta calcular_md5.py (completo)
+
+P: ¿Cómo creo una nueva versión?
+R: Lee guia_versionado.txt completo antes de empezar
+
+P: ¿Cómo verifico que los archivos no han sido modificados?
+R: Ejecuta: python calcular_md5.py → Opción 2
+
+P: ¿Dónde están las instrucciones de uso?
+R: readme.txt sección "Instrucciones de Uso"
+
+P: ¿Cómo funciona la seguridad del sistema?
+R: readme.txt sección "Detalles Técnicos de Seguridad"
+
+P: ¿Qué cambios se han hecho en cada versión?
+R: control_cambios.txt tiene el historial completo
+
+P: ¿Cómo hago rollback a una versión anterior?
+R: guia_versionado.txt sección "Procedimiento de Rollback"
+
+P: ¿Dónde aprueba el cliente la entrega?
+R: resumen_ejecutivo.txt y control_cambios.txt tienen secciones de aprobación
+
+P: ¿Qué archivos .py hay en el proyecto?
+R: 4 archivos: simetrica/service.py, simetrica/client.py,
+               asimetrica/service.py, asimetrica/client.py
+
+================================================================================
+                        CONVENCIONES DE DOCUMENTACIÓN
+================================================================================
+
+SÍMBOLOS USADOS:
+✓ - Completado/Implementado/Correcto
+□ - Pendiente/No implementado
+❌ - Error/Faltante
+⚠️  - Advertencia/Modificado
+🔐 - Cifrado/Confidencialidad
+🔨 - Hashing/Integridad
+🔑 - Autenticación/Claves
+
+FORMATO DE VERSIONES:
+X.Y.Z donde:
+- X = MAJOR (cambios incompatibles)
+- Y = MINOR (nuevas funcionalidades compatibles)
+- Z = PATCH (correcciones de bugs)
+
+FORMATO DE FECHAS:
+DD de Mes de AAAA
+Ejemplo: 19 de Octubre de 2025
+
+FORMATO DE MD5:
+Siempre en MAYÚSCULAS, 32 caracteres hexadecimales
+Ejemplo: 4AAB3B47E85B88C5F461E39AB63834A1
+
+================================================================================
+                        MANTENIMIENTO DE DOCUMENTACIÓN
+================================================================================
+
+CUANDO CREAR UNA NUEVA VERSIÓN:
+
+1. Actualizar readme.txt:
+   - Añadir nueva entrada en "Historial de Versiones"
+   - Incluir MD5 de archivos modificados
+
+2. Actualizar control_cambios.txt:
+   - Añadir nueva entrada con todos los detalles
+   - Documentar razones y impacto
+   - Incluir MD5 de archivos
+
+3. NO modificar:
+   - guia_versionado.txt (solo si cambian procedimientos)
+   - indice_documentacion.txt (solo si se añaden nuevos documentos)
+   - resumen_ejecutivo.txt (crear nuevo resumen_ejecutivo_vX.Y.Z.txt para cada versión mayor)
+
+4. Usar calcular_md5.py:
+   - Para obtener MD5 automáticamente
+   - Para verificar integridad
+
+================================================================================
+                        CONTACTO Y SOPORTE
+================================================================================
+
+Para preguntas sobre la documentación:
+- Revisa este índice primero
+- Consulta el documento apropiado según tu necesidad
+- Si no encuentras la información, contacta al desarrollador
+
+Desarrollador: [Tu Nombre]
+Email: [Tu Email]
+Proyecto: MyChat v1.0.0
+
+================================================================================
+                        HISTORIAL DE ESTE DOCUMENTO
+================================================================================
+
+Versión 1.0 - 19 de Octubre de 2025
+- Creación inicial del índice de documentación
+- Incluye todos los documentos de la v1.0.0 del proyecto
+
+================================================================================
+FIN DEL ÍNDICE DE DOCUMENTACIÓN
+================================================================================
+
+Esperamos que este índice te ayude a navegar la documentación del proyecto.
+Para cualquier duda, consulta los documentos de referencia o contacta al equipo.
+
+¡Gracias por usar MyChat!
+
+================================================================================
