@@ -1,7 +1,8 @@
 """
-CLIENTE - Versión Asimétrica Completa
+CLIENTE - Versión Asimétrica Completa con Protocolo de Hashing Mejorado
 - Cifrado: RSA-2048 + AES-256 (confidencialidad)
-- Hashing: Firmas Digitales RSA (autenticidad e integridad)
+- Hashing: Firmas Digitales RSA-SHA256 (autenticidad) + SHA-256 (verificación de mensaje)
+- Protocolo Dual: Hash del mensaje original + Firma digital del cifrado
 - Contraseñas: SHA-256 (hashing)
 """
 import socket
@@ -64,6 +65,15 @@ def verify_signature(message, signature, pub_key):
     except:
         return False
 
+def create_message_hash(message):
+    """Crea un hash SHA-256 del mensaje original (antes de cifrar)"""
+    return hashlib.sha256(message.encode('utf-8')).digest()
+
+def verify_message_hash(message, received_hash):
+    """Verifica el hash SHA-256 del mensaje original"""
+    expected_hash = create_message_hash(message)
+    return hashlib.sha256(expected_hash).digest() == hashlib.sha256(received_hash).digest()
+
 def encrypt_with_rsa(message, pub_key):
     """Cifra con RSA"""
     encrypted = pub_key.encrypt(
@@ -122,19 +132,24 @@ def decrypt_with_aes(encrypted_data, key):
         return None
 
 def send_secure_message(sock, message):
-    """Cifra con AES, firma digitalmente y envía: [firma(256bytes)][datos_cifrados]"""
+    """Cifra con AES, añade hash del mensaje original, firma digitalmente y envía"""
+    # PROTOCOLO DE HASHING DUAL:
+    # 1. Hash SHA-256 del mensaje original (32 bytes)
+    message_hash = create_message_hash(message)
+    
+    # 2. Cifrado AES-256-CBC del mensaje
     encrypted_data = encrypt_with_aes(message, session_key)
     
-    # Crea firma digital del mensaje cifrado
+    # 3. Firma digital RSA-SHA256 del mensaje cifrado (256 bytes para RSA-2048)
     signature = sign_message(encrypted_data)
     
-    # Formato: Firma (256 bytes) + datos cifrados
-    packet = signature + encrypted_data
+    # Formato del paquete: [message_hash(32)][signature(256)][encrypted_data(variable)]
+    packet = message_hash + signature + encrypted_data
     packet_b64 = base64.b64encode(packet).decode('utf-8')
     sock.send(packet_b64.encode('utf-8'))
 
 def receive_secure_message(sock):
-    """Recibe mensaje, verifica firma y descifra"""
+    """Recibe mensaje, verifica hash y firma, y descifra"""
     try:
         packet_b64 = sock.recv(8192).decode('utf-8')
         if not packet_b64:
@@ -142,17 +157,28 @@ def receive_secure_message(sock):
         
         packet = base64.b64decode(packet_b64.encode('utf-8'))
         
-        # Extrae firma (primeros 256 bytes para RSA-2048) y datos
-        signature = packet[:256]
-        encrypted_data = packet[256:]
+        # PROTOCOLO DE HASHING DUAL - Extraer componentes:
+        # [message_hash(32)][signature(256)][encrypted_data(variable)]
+        received_msg_hash = packet[:32]
+        signature = packet[32:288]  # 32 + 256 = 288
+        encrypted_data = packet[288:]
         
-        # Verifica firma digital (autenticidad e integridad)
+        # VERIFICACIÓN 1: Firma digital RSA-SHA256 (autenticidad e integridad en tránsito)
         if not verify_signature(encrypted_data, signature, server_public_key):
             print("[!] ADVERTENCIA: Firma inválida - mensaje no auténtico")
             return "[MENSAJE NO AUTÉNTICO]"
         
-        # Descifra
-        return decrypt_with_aes(encrypted_data, session_key)
+        # Descifrar mensaje
+        decrypted_message = decrypt_with_aes(encrypted_data, session_key)
+        if not decrypted_message:
+            return None
+        
+        # VERIFICACIÓN 2: Hash SHA-256 del mensaje original (integridad del contenido)
+        if not verify_message_hash(decrypted_message, received_msg_hash):
+            print("[!] ADVERTENCIA: Hash del mensaje inválido - Contenido alterado")
+            return "[CONTENIDO ALTERADO]"
+        
+        return decrypted_message
     except Exception as e:
         return None
 
@@ -204,7 +230,8 @@ def start_client():
         secure_socket.connect((server_ip, server_port))
         print("[+] Conectado al servidor de forma segura.")
         print("[🔐] Cifrado: RSA-2048 + AES-256 (Asimétrico + Simétrico)")
-        print("[🔨] Hashing: Firmas Digitales RSA-SHA256 (Autenticidad)")
+        print("[🔨] Hashing Dual: SHA-256 (Mensaje) + Firmas RSA-SHA256 (Autenticidad)")
+        print("[✓] Protocolo: Hash del mensaje original + Firma digital del cifrado")
         print("[🔑] Contraseñas: SHA-256 (Hashing)")
 
         # PASO 1: Recibe clave pública del servidor
@@ -247,7 +274,8 @@ def start_client():
         
         if respuesta == "aceptado":
             print("[✓] Autenticación exitosa. Puedes comenzar a chatear.")
-            print("[✓] Todos los mensajes tienen firma digital para verificar autenticidad")
+            print("[✓] Protocolo de hashing dual: SHA-256 + Firmas RSA-SHA256")
+            print("[✓] Doble verificación de integridad y autenticidad en cada mensaje")
             threading.Thread(target=receive_messages, args=(secure_socket,), daemon=True).start()
             send_messages(secure_socket, matricula)
         elif respuesta == "banned":

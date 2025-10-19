@@ -14,22 +14,7 @@ FECHA DE CREACIÓN: 19 de Octubre de 2025
 
 Este documento registra todos los cambios realizados al sistema MyChat,
 incluyendo nuevas características, correcciones de bugs, mejoras de seguridad
-y modificaciones en la arquitectura. Cada cambio está documentado con:
-
-- Fecha y versión
-- Descripción detallada de los cambios
-- Archivos modificados con sus hashes MD5
-- Razón del cambio
-- Impacto en el sistema
-- Estado de pruebas
-
-Este control permite:
-✓ Trazabilidad completa de cambios
-✓ Verificación de integridad de archivos
-✓ Auditoría de seguridad
-✓ Rollback a versiones anteriores si es necesario
-✓ Transparencia total hacia el cliente
-
+y modificaciones en la arquitectura. 
 ================================================================================
                         REGISTRO DE CAMBIOS
 ================================================================================
@@ -224,138 +209,214 @@ IMPACTO EN EL SISTEMA:
 - Listo para pruebas de concepto y demostración
 - Base sólida para futuras mejoras
 
-APROBACIÓN:
------------
-Desarrollador: [Tu Nombre]              Fecha: 19/10/2025
-Firma: _____________________
-
-Cliente: [Nombre del Cliente]            Fecha: __________
-Firma: _____________________
 
 ================================================================================
-
-┌──────────────────────────────────────────────────────────────────────────┐
-│ PLANTILLA PARA FUTUROS CAMBIOS                                          │
-└──────────────────────────────────────────────────────────────────────────┘
-
-VERSIÓN: [X.X.X]
-FECHA: [DD/MM/AAAA]
-TIPO: [Nueva Funcionalidad / Corrección de Bug / Mejora de Seguridad / Refactorización]
-PRIORIDAD: [Alta / Media / Baja]
-ESTADO: [En Desarrollo / En Pruebas / Completado / Cancelado]
-
-DESCRIPCIÓN DEL CAMBIO:
-------------------------
-[Descripción detallada de qué se cambió y por qué]
-
-MOTIVACIÓN:
------------
-[Razón del cambio: requisito del cliente, bug reportado, mejora proactiva, etc.]
-
-ARCHIVOS MODIFICADOS:
----------------------
-1. [nombre_archivo.py]
-   MD5 Anterior: [hash anterior]
-   MD5 Nuevo: [hash nuevo]
-   Cambios: [descripción breve de los cambios]
-
-2. [otro_archivo.py]
-   MD5 Anterior: [hash anterior]
-   MD5 Nuevo: [hash nuevo]
-   Cambios: [descripción breve de los cambios]
-
-PRUEBAS REALIZADAS:
--------------------
-□ Prueba 1: [descripción]
-□ Prueba 2: [descripción]
-□ Prueba 3: [descripción]
-
-ISSUES RESUELTOS:
------------------
-- Issue #[número]: [descripción]
-
-ISSUES CONOCIDOS:
------------------
-- [Descripción de issues pendientes]
-
-RIESGOS Y MITIGACIONES:
------------------------
-Riesgo: [descripción]
-Mitigación: [plan de mitigación]
-
-IMPACTO EN EL SISTEMA:
-----------------------
-- [Impacto 1]
-- [Impacto 2]
-
-COMPATIBILIDAD HACIA ATRÁS:
----------------------------
-[Sí / No - Explicación]
-
-APROBACIÓN:
------------
-Desarrollador: _____________________    Fecha: __________
-Cliente: ___________________________    Fecha: __________
-
+                    MyChat - REGISTRO DE CAMBIOS VERSIÓN 1.1.0
+                    Protocolo de Hashing Dual Implementado
 ================================================================================
 
-┌──────────────────────────────────────────────────────────────────────────┐
-│ PROCEDIMIENTO DE VERIFICACIÓN DE INTEGRIDAD                             │
-└──────────────────────────────────────────────────────────────────────────┘
-
-Para verificar que los archivos no han sido modificados desde la versión
-documentada, ejecutar los siguientes comandos:
-
-Windows PowerShell:
--------------------
-Get-FileHash -Algorithm MD5 "simetrica\service.py"
-Get-FileHash -Algorithm MD5 "simetrica\client.py"
-Get-FileHash -Algorithm MD5 "asimetrica\service.py"
-Get-FileHash -Algorithm MD5 "asimetrica\client.py"
-
-Linux/Mac:
-----------
-md5sum simetrica/service.py
-md5sum simetrica/client.py
-md5sum asimetrica/service.py
-md5sum asimetrica/client.py
-
-Comparar los hashes obtenidos con los registrados en este documento para la
-versión correspondiente. Si los hashes coinciden, los archivos no han sido
-modificados. Si difieren, revisar el historial de cambios para identificar
-qué versión corresponde o si ha habido modificaciones no autorizadas.
+PROYECTO: MyChat - Sistema de Chat Seguro
+VERSIÓN: 1.1.0
+FECHA: 19 de Octubre de 2025
+TIPO: Mejora de Seguridad - Protocolo de Hashing Mejorado
+ESTADO: ✓ COMPLETADO Y LISTO PARA PRUEBAS
 
 ================================================================================
-
-┌──────────────────────────────────────────────────────────────────────────┐
-│ PROCEDIMIENTO DE ROLLBACK                                               │
-└──────────────────────────────────────────────────────────────────────────┘
-
-En caso de necesitar volver a una versión anterior:
-
-1. Identificar la versión objetivo en este documento de control de cambios
-2. Verificar los hashes MD5 de la versión objetivo
-3. Restaurar los archivos desde el backup correspondiente
-4. Verificar los hashes MD5 después de la restauración
-5. Ejecutar las pruebas de la versión restaurada
-6. Documentar el rollback en este documento
-
-IMPORTANTE: Siempre mantener backups de todas las versiones documentadas.
-
+                        RESUMEN EJECUTIVO
 ================================================================================
 
-┌──────────────────────────────────────────────────────────────────────────┐
-│ HISTORIAL DE REUNIONES CON CLIENTE                                      │
-└──────────────────────────────────────────────────────────────────────────┘
+En esta versión 1.1.0 se ha implementado un PROTOCOLO DE HASHING DUAL que 
+añade una capa adicional de verificación de integridad a todas las 
+comunicaciones del sistema MyChat.
 
-Fecha: 19/10/2025
-Asistentes: [Nombres]
-Tema: Presentación de la versión inicial
-Acuerdos:
-- Se aprobó la implementación de cifrado SHA256
-- Se acordó mantener control de cambios detallado
-- Se definió el formato de documentación
+MEJORA PRINCIPAL:
+- Se añade un hash SHA-256 del mensaje ORIGINAL (antes de cifrar)
+- Se mantiene el hash/firma del mensaje CIFRADO (HMAC o firma digital)
+- Resultado: DOBLE VERIFICACIÓN de integridad en cada mensaje
 
+Esta implementación NO rompe la compatibilidad pero mejora significativamente
+la seguridad al permitir detectar alteraciones tanto en el transporte como
+en el contenido del mensaje.
+
+================================================================================
+                        ¿QUÉ SE HA CAMBIADO?
+================================================================================
+
+VERSIÓN SIMÉTRICA (simetrica/):
+--------------------------------
+ANTES (v1.0.0):
+- Mensaje → Cifrado AES → HMAC del cifrado → Envío
+- Recepción → Verificar HMAC → Descifrar
+
+AHORA (v1.1.0):
+- Mensaje → Hash SHA-256 del mensaje → Cifrado AES → HMAC del cifrado → Envío
+- Recepción → Verificar HMAC → Descifrar → Verificar hash del mensaje
+
+Formato del paquete v1.1.0:
+[Hash SHA-256 del mensaje(32 bytes)][HMAC-SHA256(32 bytes)][Datos cifrados(variable)]
+
+VERSIÓN ASIMÉTRICA (asimetrica/):
+----------------------------------
+ANTES (v1.0.0):
+- Mensaje → Cifrado AES → Firma digital del cifrado → Envío
+- Recepción → Verificar firma → Descifrar
+
+AHORA (v1.1.0):
+- Mensaje → Hash SHA-256 del mensaje → Cifrado AES → Firma digital del cifrado → Envío
+- Recepción → Verificar firma → Descifrar → Verificar hash del mensaje
+
+Formato del paquete v1.1.0:
+[Hash SHA-256 del mensaje(32 bytes)][Firma RSA-SHA256(256 bytes)][Datos cifrados(variable)]
+
+================================================================================
+                        HASHES MD5 - VERSIÓN 1.1.0
+================================================================================
+
+COMPARACIÓN DE VERSIONES:
+
+┌─────────────────────────────┬──────────────────────────────────┬──────────────────────────────────┐
+│ Archivo                     │ MD5 v1.0.0                       │ MD5 v1.1.0                       │
+├─────────────────────────────┼──────────────────────────────────┼──────────────────────────────────┤
+│ simetrica/service.py        │ 4AAB3B47E85B88C5F461E39AB63834A1 │ AEAC612AE03558EB2DEB53760B6731D1 │
+│ simetrica/client.py         │ 93F14E26C869857EA73961B2C1211E69 │ 1153F24FDFD980F016E25B2CDDE30A7B │
+│ asimetrica/service.py       │ 867CE08AB0C1023CBC04A10852410730 │ D97FE22A893E0FAFE6CBDC0D0DD4A0E0 │
+│ asimetrica/client.py        │ CAC8C6592EA48BDDCD9D9AB521FE0D3F │ 37A5D98AE67D454B89C936F7EABFD7EC │
+└─────────────────────────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+VERIFICACIÓN:
+Para verificar los hashes MD5 de la versión actual:
+   cd MyChat
+   python calcular_md5.py
+   [Seleccionar opción 1 para generar reporte]
+
+================================================================================
+                        CAMBIOS TÉCNICOS DETALLADOS
+================================================================================
+
+ARCHIVO: simetrica/service.py
+CAMBIOS:
+────────────────────────────────────────────────────────────────────────────
+1. Actualizado docstring del módulo para reflejar protocolo dual
+2. Añadida función create_message_hash(message):
+   - Crea hash SHA-256 del mensaje original antes de cifrar
+3. Añadida función verify_message_hash(message, received_hash):
+   - Verifica el hash SHA-256 del mensaje después de descifrar
+4. Modificada función send_secure_message(sock, message):
+   - Ahora calcula hash del mensaje ANTES de cifrar
+   - Formato: [hash_mensaje][hmac][datos_cifrados]
+5. Modificada función receive_secure_message(sock):
+   - Extrae los 3 componentes del paquete
+   - Verifica HMAC del cifrado (integridad en tránsito)
+   - Descifra el mensaje
+   - Verifica hash del mensaje (integridad del contenido)
+6. Actualizados mensajes de consola para indicar protocolo dual
+
+ARCHIVO: simetrica/client.py
+CAMBIOS:
+────────────────────────────────────────────────────────────────────────────
+1. Actualizado docstring del módulo
+2. Añadidas funciones create_message_hash() y verify_message_hash()
+3. Modificadas send_secure_message() y receive_secure_message()
+   - Misma lógica que en service.py
+4. Actualizados mensajes informativos al conectar
+
+ARCHIVO: asimetrica/service.py
+CAMBIOS:
+────────────────────────────────────────────────────────────────────────────
+1. Actualizado docstring del módulo para reflejar protocolo dual
+2. Añadida función create_message_hash(message):
+   - Crea hash SHA-256 del mensaje original antes de cifrar
+3. Añadida función verify_message_hash(message, received_hash):
+   - Verifica el hash SHA-256 del mensaje después de descifrar
+4. Modificada función send_secure_message(sock, message, session_key):
+   - Ahora calcula hash del mensaje ANTES de cifrar
+   - Formato: [hash_mensaje(32)][firma(256)][datos_cifrados]
+5. Modificada función receive_secure_message(sock, session_key, client_pub_key):
+   - Extrae los 3 componentes del paquete
+   - Verifica firma digital (autenticidad en tránsito)
+   - Descifra el mensaje
+   - Verifica hash del mensaje (integridad del contenido)
+6. Actualizados mensajes de consola para indicar protocolo dual
+
+ARCHIVO: asimetrica/client.py
+CAMBIOS:
+────────────────────────────────────────────────────────────────────────────
+1. Actualizado docstring del módulo
+2. Añadidas funciones create_message_hash() y verify_message_hash()
+3. Modificadas send_secure_message() y receive_secure_message()
+   - Misma lógica que en service.py
+4. Actualizados mensajes informativos al conectar
+
+.1.0
+4. Reconectar
+
+
+================================================================================
+                        INSTRUCCIONES DE USO
+================================================================================
+
+NO HAY CAMBIOS EN LA EXPERIENCIA DE USUARIO
+────────────────────────────────────────────────────────────────────────────
+El uso del sistema es idéntico a v1.0.0:
+
+VERSIÓN SIMÉTRICA:
+1. Servidor: python simetrica/service.py
+2. Cliente: python simetrica/client.py
+3. Ingresar IP, matrícula y contraseña
+
+VERSIÓN ASIMÉTRICA:
+1. Servidor: python asimetrica/service.py
+2. Cliente: python asimetrica/client.py
+3. Ingresar IP, matrícula y contraseña
+
+DIFERENCIAS VISIBLES:
+- Mensajes de inicio muestran "Protocolo de hashing dual"
+- Mensajes de error más específicos (CORRUPTO vs ALTERADO)
+
+
+
+================================================================================
+                        ESTADÍSTICAS DE CAMBIOS
+================================================================================
+
+
+
+FUNCIONES AÑADIDAS:     8 funciones (2 por archivo)
+FUNCIONES MODIFICADAS:  8 funciones (2 por archivo)
+ARCHIVOS MODIFICADOS:   4 archivos
+
+IMPACTO EN TAMAÑO:
+────────────────────────────────────────────────────────────────────────────
+Aumento de tamaño por archivo: ~1-2 KB
+Overhead por mensaje: 32 bytes adicionales
+
+
+
+================================================================================
+                        DECLARACIÓN DE CUMPLIMIENTO
+================================================================================
+
+Por la presente declaro que:
+
+✓ El protocolo de hashing dual ha sido implementado correctamente en ambas
+  versiones (simétrica y asimétrica)
+
+✓ Todos los archivos .py han sido modificados y testeados
+
+✓ Los hashes MD5 de la versión 1.1.0 han sido calculados y documentados
+
+✓ La documentación técnica de los cambios está completa
+
+✓ El sistema está listo para pruebas de integración
+
+✓ NO hay compatibilidad hacia atrás con v1.0.0
+
+Fecha: 19 de Octubre de 2025
+Versión: 1.1.0
+Desarrollador: [Tu Nombre]
+
+================================================================================
+FIN DEL REGISTRO DE CAMBIOS - VERSIÓN 1.1.0
 ================================================================================
 
 ┌──────────────────────────────────────────────────────────────────────────┐

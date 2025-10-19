@@ -1,7 +1,8 @@
 """
-CLIENTE - Versión Simétrica Completa
+CLIENTE - Versión Simétrica Completa con Protocolo de Hashing Mejorado
 - Cifrado: AES-256-CBC (confidencialidad)
-- Hashing: HMAC-SHA256 (integridad)
+- Hashing: HMAC-SHA256 (integridad) + SHA-256 (verificación de mensaje)
+- Protocolo Dual: Hash del mensaje original + HMAC del mensaje cifrado
 - Contraseñas: SHA-256 (hashing)
 """
 
@@ -57,15 +58,34 @@ def create_hmac(data):
 def verify_hmac(data, received_hmac):
     return hmac.compare_digest(create_hmac(data), received_hmac)
 
+def create_message_hash(message):
+    """Crea un hash SHA-256 del mensaje original (antes de cifrar)"""
+    return hashlib.sha256(message.encode('utf-8')).digest()
+
+def verify_message_hash(message, received_hash):
+    """Verifica el hash SHA-256 del mensaje"""
+    expected_hash = create_message_hash(message)
+    return hmac.compare_digest(expected_hash, received_hash)
+
 # ===========================
 # ENVÍO Y RECEPCIÓN SEGURA
 # ===========================
 def send_secure_message(sock, message):
     try:
+        # PROTOCOLO DE HASHING DUAL:
+        # 1. Hash SHA-256 del mensaje original (32 bytes)
+        message_hash = create_message_hash(message)
+        
+        # 2. Cifrado AES-256-CBC del mensaje
         encrypted_data = encrypt_message(message)
+        
+        # 3. HMAC-SHA256 del mensaje cifrado (32 bytes)
         message_hmac = create_hmac(encrypted_data)
-        packet = message_hmac + encrypted_data
+        
+        # Formato del paquete: [message_hash(32)][hmac(32)][encrypted_data(variable)]
+        packet = message_hash + message_hmac + encrypted_data
         packet_b64 = base64.b64encode(packet)
+        
         sock.sendall(struct.pack(">I", len(packet_b64)) + packet_b64)
     except Exception as e:
         print(f"[!] Error al enviar mensaje: {e}")
@@ -80,12 +100,29 @@ def receive_secure_message(sock):
         if not packet_b64:
             return None
         packet = base64.b64decode(packet_b64)
-        received_hmac = packet[:32]
-        encrypted_data = packet[32:]
+        
+        # PROTOCOLO DE HASHING DUAL - Extraer componentes:
+        # [message_hash(32)][hmac(32)][encrypted_data(variable)]
+        received_msg_hash = packet[:32]
+        received_hmac = packet[32:64]
+        encrypted_data = packet[64:]
+        
+        # VERIFICACIÓN 1: HMAC-SHA256 del mensaje cifrado (integridad en tránsito)
         if not verify_hmac(encrypted_data, received_hmac):
-            print("[!] HMAC inválido detectado")
+            print("[!] HMAC inválido detectado - Mensaje corrupto en tránsito")
             return "[MENSAJE CORRUPTO]"
-        return decrypt_message(encrypted_data)
+        
+        # Descifrar mensaje
+        decrypted_message = decrypt_message(encrypted_data)
+        if not decrypted_message:
+            return None
+        
+        # VERIFICACIÓN 2: Hash SHA-256 del mensaje original (integridad del contenido)
+        if not verify_message_hash(decrypted_message, received_msg_hash):
+            print("[!] Hash del mensaje inválido - Contenido alterado")
+            return "[CONTENIDO ALTERADO]"
+        
+        return decrypted_message
     except Exception as e:
         return None
 
@@ -146,7 +183,8 @@ def start_client():
         secure_socket.connect((server_ip, server_port))
         print("[+] Conectado al servidor de forma segura.")
         print("[🔐] Cifrado: AES-256-CBC (Simétrico)")
-        print("[🔨] Hashing: HMAC-SHA256 (Integridad)")
+        print("[🔨] Hashing Dual: SHA-256 (Mensaje) + HMAC-SHA256 (Integridad)")
+        print("[✓] Protocolo: Hash del mensaje original + HMAC del cifrado")
         print("[🔑] Contraseñas: SHA-256 (Hashing)")
 
         matricula = input("Introduce tu matrícula: ").strip()
@@ -162,7 +200,8 @@ def start_client():
         respuesta = secure_socket.recv(1024).decode('utf-8')
         if respuesta == "aceptado":
             print("[✓] Autenticación exitosa. Puedes comenzar a chatear.")
-            print("[✓] Todos los mensajes están cifrados y autenticados con HMAC")
+            print("[✓] Protocolo de hashing dual: SHA-256 + HMAC-SHA256")
+            print("[✓] Doble verificación de integridad en cada mensaje")
             threading.Thread(target=receive_messages, args=(secure_socket,), daemon=True).start()
             send_messages(secure_socket, matricula)
         elif respuesta == "banned":
