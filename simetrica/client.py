@@ -19,6 +19,21 @@ from cryptography.hazmat.primitives import padding
 import struct
 
 # ===========================
+# COLORES PARA TERMINAL
+# ===========================
+class Colors:
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    MAGENTA = '\033[95m'
+    CYAN = '\033[96m'
+    WHITE = '\033[97m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    END = '\033[0m'
+
+# ===========================
 # CONFIGURACIÓN DE CLAVES
 # ===========================
 SYMMETRIC_KEY = hashlib.sha256(b"mi_clave_super_segura_para_aes").digest()
@@ -109,8 +124,13 @@ def receive_secure_message(sock):
         
         # VERIFICACIÓN 1: HMAC-SHA256 del mensaje cifrado (integridad en tránsito)
         if not verify_hmac(encrypted_data, received_hmac):
-            print("[!] HMAC inválido detectado - Mensaje corrupto en tránsito")
-            return "[MENSAJE CORRUPTO]"
+            error_msg = f"\n{Colors.RED}{Colors.BOLD}╔════════════════════════════════════════╗{Colors.END}"
+            error_msg += f"\n{Colors.RED}{Colors.BOLD}║  ⚠️  ALERTA DE SEGURIDAD              ║{Colors.END}"
+            error_msg += f"\n{Colors.RED}{Colors.BOLD}║  HMAC INVÁLIDO DETECTADO              ║{Colors.END}"
+            error_msg += f"\n{Colors.RED}{Colors.BOLD}║  Mensaje corrupto en tránsito         ║{Colors.END}"
+            error_msg += f"\n{Colors.RED}{Colors.BOLD}╚════════════════════════════════════════╝{Colors.END}"
+            print(error_msg)
+            return f"{Colors.RED}[MENSAJE CORRUPTO - HMAC INVÁLIDO]{Colors.END}"
         
         # Descifrar mensaje
         decrypted_message = decrypt_message(encrypted_data)
@@ -119,9 +139,20 @@ def receive_secure_message(sock):
         
         # VERIFICACIÓN 2: Hash SHA-256 del mensaje original (integridad del contenido)
         if not verify_message_hash(decrypted_message, received_msg_hash):
-            print("[!] Hash del mensaje inválido - Contenido alterado")
-            return "[CONTENIDO ALTERADO]"
+            expected_hash = hashlib.sha256(decrypted_message.encode('utf-8')).hexdigest()
+            received_hash_hex = received_msg_hash.hex()
+            
+            error_msg = f"\n{Colors.RED}{Colors.BOLD}╔════════════════════════════════════════╗{Colors.END}"
+            error_msg += f"\n{Colors.RED}{Colors.BOLD}║  🚨 CONTENIDO ALTERADO DETECTADO      ║{Colors.END}"
+            error_msg += f"\n{Colors.RED}{Colors.BOLD}║  Hash SHA-256 no coincide             ║{Colors.END}"
+            error_msg += f"\n{Colors.RED}{Colors.BOLD}╚════════════════════════════════════════╝{Colors.END}"
+            error_msg += f"\n{Colors.YELLOW}Hash recibido:  {received_hash_hex}{Colors.END}"
+            error_msg += f"\n{Colors.YELLOW}Hash esperado:  {expected_hash}{Colors.END}"
+            error_msg += f"\n{Colors.RED}Mensaje original alterado - NO CONFIAR{Colors.END}\n"
+            print(error_msg)
+            return f"{Colors.RED}[CONTENIDO ALTERADO - HASH INVÁLIDO]{Colors.END}"
         
+        # ✅ Mensaje verificado correctamente
         return decrypted_message
     except Exception as e:
         return None
@@ -143,11 +174,15 @@ def receive_messages(client_socket):
         try:
             message = receive_secure_message(client_socket)
             if message:
-                print(f"\n{message}")
+                # Si el mensaje contiene alertas de seguridad, ya viene con color
+                if "[MENSAJE CORRUPTO" in message or "[CONTENIDO ALTERADO" in message:
+                    print(f"\n{message}")
+                else:
+                    print(f"\n{Colors.CYAN}{message}{Colors.END}")
             else:
                 break
         except Exception as e:
-            print(f"[!] Error al recibir mensaje: {e}")
+            print(f"{Colors.RED}[!] Error al recibir mensaje: {e}{Colors.END}")
             break
 
 def send_messages(client_socket, mi_nombre):

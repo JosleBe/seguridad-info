@@ -19,6 +19,21 @@ from cryptography.hazmat.primitives import padding
 import struct
 
 # ===========================
+# COLORES PARA TERMINAL
+# ===========================
+class Colors:
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    MAGENTA = '\033[95m'
+    CYAN = '\033[96m'
+    WHITE = '\033[97m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    END = '\033[0m'
+
+# ===========================
 # CONFIGURACIÓN DE CLAVES
 # ===========================
 # AES-256 (32 bytes exactos)
@@ -129,7 +144,8 @@ def receive_secure_message(sock):
         
         # VERIFICACIÓN 1: HMAC-SHA256 del mensaje cifrado (integridad en tránsito)
         if not verify_hmac(encrypted_data, received_hmac):
-            print("[!] HMAC inválido detectado - Mensaje corrupto en tránsito")
+            error_msg = f"{Colors.RED}{Colors.BOLD}[⚠️ HMAC INVÁLIDO] Mensaje corrupto en tránsito{Colors.END}"
+            print(error_msg)
             return "[MENSAJE CORRUPTO]"
         
         # Descifrar mensaje
@@ -139,7 +155,13 @@ def receive_secure_message(sock):
         
         # VERIFICACIÓN 2: Hash SHA-256 del mensaje original (integridad del contenido)
         if not verify_message_hash(decrypted_message, received_msg_hash):
-            print("[!] Hash del mensaje inválido - Contenido alterado")
+            expected_hash = hashlib.sha256(decrypted_message.encode('utf-8')).hexdigest()
+            received_hash_hex = received_msg_hash.hex()
+            
+            error_msg = f"{Colors.RED}{Colors.BOLD}[🚨 CONTENIDO ALTERADO]{Colors.END} "
+            error_msg += f"Hash recibido: {Colors.YELLOW}{received_hash_hex}{Colors.END} | "
+            error_msg += f"Esperado: {Colors.YELLOW}{expected_hash}{Colors.END}"
+            print(error_msg)
             return "[CONTENIDO ALTERADO]"
         
         return decrypted_message
